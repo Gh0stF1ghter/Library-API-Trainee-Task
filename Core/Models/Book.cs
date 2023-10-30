@@ -18,10 +18,11 @@ namespace Core.Models
         public string BookName { get; set; } = null!;
         public string BookISBN { get; set; } = null!;
         public string? BookDescription { get; set; }
-        public string? BookTakeDate { get; set; }
-        public string? BookReturnDate { get; set; }
+        public DateOnly? BookTakeDate { get; set; }
+        public DateOnly? BookReturnDate { get; set; }
 
         public Author Author { get; set; } = null!;
-        public ICollection<Genre> Genres { get; set; } = new Collection<Genre>();
+
+        public ICollection<BookGenre> BookGenres { get; set; }
     }
 }

@@ -11,6 +11,6 @@ namespace Core.Models
         public int GenreId { get; set; }
         public int GenreName { get; set; }
 
-        public ICollection<Book>? Books { get; set; }
+        public ICollection<BookGenre>? BookGenres { get; set; }
     }
 }
