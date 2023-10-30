@@ -10,11 +10,11 @@ namespace Core.Services
     public interface IAuthorService
     {
         Task<IEnumerable<Author>> GetAllAuthorsAsync();
-        ValueTask<Author> GetAuthorByIdAsync(int id);
+        ValueTask<Author?> GetAuthorByIdAsync(int id);
 
         Task<Author> CreateAuthorAsync(Author author);
 
-        Task<Author> UpdateAuthorAsync(Author oldAuthor, Author newAuthor);
-        void DeleteAuthor(Author author);
+        Task UpdateAuthorAsync(Author oldAuthor, Author newAuthor);
+        Task DeleteAuthor(Author author);
     }
 }
