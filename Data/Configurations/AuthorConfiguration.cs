@@ -30,6 +30,8 @@ namespace Data.Configurations
             builder
                 .HasMany(a => a.Books)
                 .WithOne(b => b.Author);
+            builder
+                .ToTable("Author");
         }
     }
 }

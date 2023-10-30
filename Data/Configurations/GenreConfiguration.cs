@@ -26,6 +26,8 @@ namespace Data.Configurations
             builder
                 .HasMany(g => g.BookGenres)
                 .WithOne(bg => bg.Genre);
+            builder
+                .ToTable("Genre");
         }
     }
 }
