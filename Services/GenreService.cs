@@ -1,11 +1,6 @@
 ﻿using Core;
 using Core.Models;
 using Core.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services
 {
@@ -23,7 +18,6 @@ namespace Services
             await _unitOfWork.CommitAsync();
             return genre;
         }
-
 
         public async Task UpdateGenreAsync(Genre oldGenre, Genre newGenre)
         {

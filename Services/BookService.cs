@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Core;
+﻿using Core;
 using Core.Models;
 using Core.Services;
 
@@ -14,7 +9,6 @@ namespace Services
         private readonly IUnitOfWork _unitOfWork;
 
         public BookService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
-
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync() => await _unitOfWork.Books.GetAllAsync();
 

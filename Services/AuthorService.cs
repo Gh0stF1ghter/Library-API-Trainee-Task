@@ -9,7 +9,7 @@ namespace Services
         private readonly IUnitOfWork _unitOfWork;
 
         public AuthorService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
-        
+
         public async Task<IEnumerable<Author>> GetAllAuthorsAsync() => await _unitOfWork.Authors.GetAllAsync();
         public async ValueTask<Author?> GetAuthorByIdAsync(int id) => await _unitOfWork.Authors.GetByIdAsync(id);
 
