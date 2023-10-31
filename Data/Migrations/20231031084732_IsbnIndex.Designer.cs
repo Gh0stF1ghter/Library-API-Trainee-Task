@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    partial class LibraryContextModelSnapshot : ModelSnapshot
+    [Migration("20231031084732_IsbnIndex")]
+    partial class IsbnIndex
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,6 +81,8 @@ namespace Data.Migrations
 
                     b.HasKey("BookId");
 
+                    b.HasIndex("BookAuthorId");
+
                     b.HasIndex("BookISBN")
                         .IsUnique();
 
@@ -93,6 +98,8 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("GenreId", "BookId");
+
+                    b.HasIndex("BookId");
 
                     b.HasIndex("GenreId", "BookId");
 
