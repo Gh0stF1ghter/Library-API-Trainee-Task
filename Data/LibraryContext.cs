@@ -6,10 +6,7 @@ namespace Data
 {
     public class LibraryContext : DbContext
     {
-        public LibraryContext(DbContextOptions options) : base(options)
-        {
-            Database.EnsureCreated();
-        }
+        public LibraryContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Author> Authors { get; set; } = null!;
         public DbSet<Genre> Genres { get; set; } = null!;
