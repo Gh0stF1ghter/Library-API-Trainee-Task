@@ -14,6 +14,9 @@ namespace Data.Configurations
                 .Property(b => b.BookId)
                 .UseIdentityColumn();
             builder
+                .HasIndex(b => b.BookISBN)
+                .IsUnique();
+            builder
                 .Property(b => b.BookName)
                 .IsRequired()
                 .HasMaxLength(50);
