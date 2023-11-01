@@ -7,8 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Services;
-using System.Configuration;
 using System.Text;
+using Core.Models.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,13 +18,7 @@ var services = builder.Services;
 
 services.AddDbContext<LibraryContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Data")));
 
-services.AddIdentity<User, IdentityRole>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequiredLength = 8;
-})
+services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<LibraryContext>()
     .AddDefaultTokenProviders();
 
@@ -43,9 +37,12 @@ services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Authentication:Issuer"],
         ValidAudience = builder.Configuration["Authentication:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Authentication:Key"])),
+        ClockSkew = TimeSpan.Zero
     };
 });
+
+services.AddTransient<IAuthentication, Authentication>();
 
 services.AddScoped<IUnitOfWork, UnitOfWork>();
 services.AddTransient<IGenreService, GenreService>();
@@ -60,7 +57,14 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(s => s.SwaggerDoc("v1", new OpenApiInfo { Title = "Libary", Version = "v1" }));
 
+//services.AddCors(options =>
+//{
+//    options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+//});
+
 var app = builder.Build();
+
+app.UseExceptionHandler("/error");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -69,10 +73,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseExceptionHandler("/error");
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
