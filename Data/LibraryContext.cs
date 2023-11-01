@@ -1,10 +1,12 @@
 ﻿using Core.Models;
+using Core.Models.Auth;
 using Data.Configurations;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data
 {
-    public class LibraryContext : DbContext
+    public class LibraryContext : IdentityDbContext<User>
     {
         public LibraryContext(DbContextOptions options) : base(options) { }
 
@@ -14,6 +16,8 @@ namespace Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.ApplyConfiguration(new AuthorConfiguration());
             modelBuilder.ApplyConfiguration(new GenreConfiguration());
             modelBuilder.ApplyConfiguration(new BookConfiguration());
