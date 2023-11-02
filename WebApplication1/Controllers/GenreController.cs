@@ -4,6 +4,7 @@ using AutoMapper;
 using Core.Models;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace API.Controllers
 {
@@ -33,16 +34,23 @@ namespace API.Controllers
         public async Task<ActionResult<GenreResource>> GetGenreById(int id)
         {
             var genre = await _genreService.GetGenreByIdAsync(id);
+
+            if(genre == null)
+                return NotFound("Genre with id: " + id + "does not exist");
+            
             var genreResource = _mapper.Map<GenreResource>(genre);
 
             return Ok(genreResource);
         }
 
         [HttpPost]
-        public async Task<ActionResult<GenreResource>> PostBook(SaveGenreResource saveGenreResource)
+        public async Task<ActionResult<GenreResource>> PostGenre(SaveGenreResource saveGenreResource)
         {
             var validator = new SaveGenreResourceValidator();
-            validator.Validate(saveGenreResource);
+            var validation = validator.Validate(saveGenreResource);
+
+            if (!validation.IsValid)
+                return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
 
             var genre = _mapper.Map<Genre>(saveGenreResource);
             var newGenre = await _genreService.CreateGenreAsync(genre);
@@ -55,13 +63,17 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PutGenre(int id, [FromBody] SaveGenreResource newSaveGenreResource)
         {
-            var validator = new SaveGenreResourceValidator();
-            validator.Validate(newSaveGenreResource);
-
             var oldGenre = await _genreService.GetGenreByIdAsync(id);
 
             if (oldGenre is null)
-                return BadRequest();
+                return BadRequest("Genre with id: " + id + "does not exist");
+
+            var validator = new SaveGenreResourceValidator();
+            var validation = validator.Validate(newSaveGenreResource);
+
+            if (!validation.IsValid)
+                return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
+
 
             var newGenre = _mapper.Map<Genre>(newSaveGenreResource);
             await _genreService.UpdateGenreAsync(oldGenre, newGenre);
@@ -78,7 +90,7 @@ namespace API.Controllers
             var genre = await _genreService.GetGenreByIdAsync(id);
 
             if (genre is null)
-                return BadRequest();
+                return BadRequest("Genre with id: " + id + "does not exist");
 
             await _genreService.DeleteGenreAsync(genre);
 

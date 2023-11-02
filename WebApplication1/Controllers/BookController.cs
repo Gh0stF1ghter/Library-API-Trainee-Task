@@ -33,6 +33,19 @@ namespace API.Controllers
         public async Task<ActionResult<BookResource>> GetBookById(int id)
         {
             var book = await _bookService.GetBookByIdAsync(id);
+
+            if (book == null)
+                return NotFound("Book with id: " +  id + " does not exist");
+
+            var bookResource = _mapper.Map<BookResource>(book);
+
+            return Ok(bookResource);
+        }
+
+        [HttpGet("isbn")]
+        public async Task<ActionResult<BookResource>> GetBookByIsbn(string isbn)
+        {
+            var book = await _bookService.GetBookByIsbnAsync(isbn);
             var bookResource = _mapper.Map<BookResource>(book);
 
             return Ok(bookResource);
@@ -42,9 +55,16 @@ namespace API.Controllers
         public async Task<ActionResult<BookResource>> PostBook(SaveBookResource saveBookResource)
         {
             var validator = new SaveBookResourceValidator();
-            validator.Validate(saveBookResource);
+            var validation = validator.Validate(saveBookResource);
+
+            if (!validation.IsValid)
+                return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
 
             var book = _mapper.Map<Book>(saveBookResource);
+
+            if (await _bookService.GetBookByIsbnAsync(book.BookISBN) != null)
+                return BadRequest("Book with such ISBN already exists");
+
             var newBook = await _bookService.CreateBookAsync(book);
 
             var bookResource = _mapper.Map<BookResource>(newBook);
@@ -55,13 +75,15 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> PutBook(int id, [FromBody] SaveBookResource newSaveBookResource)
         {
-            var validator = new SaveBookResourceValidator();
-            validator.Validate(newSaveBookResource);
-
             var oldBook = await _bookService.GetBookByIdAsync(id);
 
             if (oldBook is null)
-                return BadRequest();
+                return BadRequest("Book with id: " + id + " does not exist");
+
+            var validator = new SaveBookResourceValidator();
+            var validation = validator.Validate(newSaveBookResource);
+            if (validation.IsValid)
+                return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
 
             var newBook = _mapper.Map<Book>(newSaveBookResource);
             await _bookService.UpdateBookAsync(oldBook, newBook);
@@ -78,7 +100,7 @@ namespace API.Controllers
             var genre = await _bookService.GetBookByIdAsync(id);
 
             if (genre is null)
-                return BadRequest();
+                return BadRequest("Book with id: " + id + " does not exist");
 
             await _bookService.DeleteBookAsync(genre);
 
