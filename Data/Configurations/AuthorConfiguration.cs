@@ -28,10 +28,19 @@ namespace Data.Configurations
                 .IsRequired()
                 .HasMaxLength(50);
             builder
-                .HasMany(a => a.Books)
-                .WithOne(b => b.Author);
-            builder
                 .ToTable("Author");
+            builder.
+                HasData(
+    new Author { AuthorId = 1, AuthorFirstMidName = "Douglas", AuthorLastName = "Adams" },
+    new Author { AuthorId = 2, AuthorFirstMidName = "Suzanne", AuthorLastName = "Collins" },
+    new Author { AuthorId = 3, AuthorFirstMidName = "Dan", AuthorLastName = "Brown" },
+    new Author { AuthorId = 4, AuthorFirstMidName = "Joanne", AuthorLastName = "Rowling" },
+    new Author { AuthorId = 5, AuthorFirstMidName = "Jerome David", AuthorLastName = "Salinger" },
+    new Author { AuthorId = 6, AuthorFirstMidName = "Harper", AuthorLastName = "Lee" },
+    new Author { AuthorId = 7, AuthorFirstMidName = "John", AuthorLastName = "Tolkien" },
+    new Author { AuthorId = 8, AuthorFirstMidName = "George", AuthorLastName = "Orwell" },
+    new Author { AuthorId = 9, AuthorFirstMidName = "Khaled", AuthorLastName = "Hosseini" },
+    new Author { AuthorId = 10, AuthorFirstMidName = "Stieg", AuthorLastName = "Larsson" });
         }
     }
 }
