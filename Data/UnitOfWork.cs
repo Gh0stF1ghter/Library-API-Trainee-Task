@@ -1,5 +1,7 @@
 ﻿using Core;
 using Core.Models;
+using Core.Repositories;
+using Data.Repositories;
 
 namespace Data
 {
@@ -11,7 +13,7 @@ namespace Data
 
         public IRepository<Author> Authors => new Repository<Author>(_context);
         public IRepository<Genre> Genres => new Repository<Genre>(_context);
-        public IRepository<Book> Books => new Repository<Book>(_context);
+        public IBookRepository Books => new BookRepository(_context);
 
         public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
 

@@ -17,12 +17,7 @@ namespace Data.Configurations
                 .HasKey(bg => new { bg.GenreId, bg.BookId });
             builder
                 .HasIndex(bg => new { bg.GenreId, bg.BookId });
-            builder
-                .HasOne(bg => bg.Genre)
-                .WithMany(g => g.BookGenres);
-            builder
-                .HasOne(bg => bg.Book)
-                .WithMany(b => b.BookGenres);
+            builder.ToTable("BookGenre");
         }
     }
 }

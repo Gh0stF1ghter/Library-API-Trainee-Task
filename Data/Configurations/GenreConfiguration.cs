@@ -25,7 +25,8 @@ namespace Data.Configurations
                 .HasMaxLength(30);
             builder
                 .HasMany(g => g.BookGenres)
-                .WithOne(bg => bg.Genre);
+                .WithOne(bg => bg.Genre)
+                .HasForeignKey(bg => bg.GenreId);
             builder
                 .ToTable("Genre");
         }

@@ -11,6 +11,7 @@ namespace API.Mappers
             CreateMap<Author, AuthorResource>();
             CreateMap<Genre, GenreResource>();
             CreateMap<Book, BookResource>();
+            CreateMap<BookGenre, BookGenreResource>();
 
             CreateMap<AuthorResource, Author>();
             CreateMap<GenreResource, Genre>();

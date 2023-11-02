@@ -39,7 +39,8 @@ namespace Data.Configurations
                 .HasForeignKey(b => b.BookAuthorId);
             builder
                 .HasMany(b => b.BookGenres)
-                .WithOne(bg => bg.Book);
+                .WithOne(bg => bg.Book)
+                .HasForeignKey(bg => bg.BookId);
             builder
                 .ToTable("Book");
         }

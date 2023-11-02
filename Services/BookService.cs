@@ -10,9 +10,9 @@ namespace Services
 
         public BookService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<IEnumerable<Book>> GetAllBooksAsync() => await _unitOfWork.Books.GetAllAsync();
+        public async Task<IEnumerable<Book>> GetAllBooksAsync() => await _unitOfWork.Books.GetAllWithRelateAsync();
 
-        public async ValueTask<Book?> GetBookByIdAsync(int id) => await _unitOfWork.Books.GetByIdAsync(id);
+        public async ValueTask<Book?> GetBookByIdAsync(int id) => await _unitOfWork.Books.GetWithRelateByIdAsync(id);
 
         public async Task<Book> CreateBookAsync(Book book)
         {

@@ -1,4 +1,7 @@
-﻿namespace API.Resources
+﻿using Core.Models;
+using System.Collections.ObjectModel;
+
+namespace API.Resources
 {
     public class BookResource
     {
@@ -11,5 +14,7 @@
         public DateTime BookTakeDate { get; set; }
         public DateTime BookReturnDate { get; set; }
 
+        public AuthorResource Author { get; set; } = null!;
+        public ICollection<BookGenreResource> BookGenres { get; set; } = new Collection<BookGenreResource>();
     }
 }
