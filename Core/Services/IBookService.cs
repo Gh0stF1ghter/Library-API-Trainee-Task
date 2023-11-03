@@ -8,7 +8,7 @@ namespace Core.Services
         ValueTask<Book?> GetBookByIdAsync(int id);
 
         Task<Book> CreateBookAsync(Book book);
-
+        Task AddGenresToBookAsync(ICollection<BookGenre> bookGenres);
         Task<Book?> GetBookByIsbnAsync(string bookIsbn);
 
         Task UpdateBookAsync(Book oldBook, Book newBook);

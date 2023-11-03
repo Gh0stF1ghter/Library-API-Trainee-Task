@@ -12,12 +12,14 @@ namespace API.Controllers
     public class BookController : ControllerBase
     {
         private readonly IBookService _bookService;
+        private readonly IGenreService _genreService;
         private readonly IMapper _mapper;
 
-        public BookController(IBookService bookService, IMapper mapper)
+        public BookController(IBookService bookService, IMapper mapper, IGenreService genreService)
         {
             _bookService = bookService;
             _mapper = mapper;
+            _genreService = genreService;
         }
 
         [HttpGet]
@@ -52,7 +54,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<BookResource>> PostBook(SaveBookResource saveBookResource)
+        public async Task<ActionResult<BookResource>> PostBook([FromBody]SaveBookResource saveBookResource)
         {
             var validator = new SaveBookResourceValidator();
             var validation = validator.Validate(saveBookResource);
@@ -70,6 +72,36 @@ namespace API.Controllers
             var bookResource = _mapper.Map<BookResource>(newBook);
 
             return Ok(bookResource);
+        }
+
+        [HttpPost("{bookId}")]
+        public async Task<ActionResult> AddGenresToBook(int bookId, [FromBody] ICollection<int> genreIds)
+        {
+            var book = await _bookService.GetBookByIdAsync(bookId);
+
+            if (book == null)
+                return NotFound("Book with id: " + bookId + " does not exist");
+
+            List<BookGenre> bookGenres = new();
+
+            foreach (var id in genreIds)
+            {
+                var genre = await _genreService.GetGenreByIdAsync(id);
+                if (genre == null)
+                    return BadRequest();
+
+                var bookGenre = _mapper.Map<BookGenreResource, BookGenre>(new BookGenreResource { BookId = book.BookId, GenreId = id });
+
+                bookGenres.Add(bookGenre);
+            }
+
+            await _bookService.AddGenresToBookAsync(bookGenres);
+
+            var bookwithGenres = await _bookService.GetBookByIdAsync(bookId);
+            var bookwithGenresResource = _mapper.Map<BookResource>(bookwithGenres);
+
+
+            return Ok(bookwithGenresResource);
         }
 
         [HttpPut("{id}")]

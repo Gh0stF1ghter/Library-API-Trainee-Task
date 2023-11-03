@@ -21,6 +21,12 @@ namespace Services
             return book;
         }
 
+        public async Task AddGenresToBookAsync(ICollection<BookGenre> bookGenres)
+        {
+            await _unitOfWork.Books.AddGenresToBookAsync(bookGenres);
+            await _unitOfWork.CommitAsync();
+        }
+
         public async Task<Book?> GetBookByIsbnAsync(string bookIsbn) => await _unitOfWork.Books.SingleOrDefaultAsync(b => b.BookISBN == bookIsbn);
 
         public async Task UpdateBookAsync(Book oldBook, Book newBook)

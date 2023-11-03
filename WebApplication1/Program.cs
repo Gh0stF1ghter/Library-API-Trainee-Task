@@ -57,11 +57,6 @@ services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen(s => s.SwaggerDoc("v1", new OpenApiInfo { Title = "Libary", Version = "v1" }));
 
-//services.AddCors(options =>
-//{
-//    options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-//});
-
 var app = builder.Build();
 
 app.UseExceptionHandler("/error");

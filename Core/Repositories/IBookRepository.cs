@@ -12,5 +12,7 @@ namespace Core.Repositories
         Task<IEnumerable<Book>> GetAllWithRelateAsync();
 
         ValueTask<Book?> GetWithRelateByIdAsync(int id);
+
+        Task AddGenresToBookAsync(ICollection<BookGenre> bookGenres);
     }
 }
