@@ -20,7 +20,13 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Returns a list of authors.
+        /// </summary>
+        /// <returns>A list of authors from the database</returns>
+        /// <response code="200">Returns a list of authors</response>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<AuthorResource>>> GetAllAuthors()
         { 
             var authors = await _authorService.GetAllAuthorsAsync();
@@ -29,7 +35,15 @@ namespace API.Controllers
             return Ok(authorsResource);
         }
 
+        /// <summary>
+        /// Returns an author by its id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>An author by id</returns>
+        /// <response code="200">Returns an author</response>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AuthorResource>> GetAuthorById(int id)
         {
             var author = await _authorService.GetAuthorByIdAsync(id);
@@ -43,6 +57,8 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<AuthorResource>> PostAuthor( SaveAuthorResource saveAuthorResource)
         {
             var validator = new SaveAuthorResourceValidator();
@@ -56,11 +72,13 @@ namespace API.Controllers
 
             var authorResource = _mapper.Map<Author, AuthorResource>(newAuthor);
 
-            return Ok(authorResource);
+            return CreatedAtAction(nameof(PostAuthor), authorResource);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> PutAuthor(int id, [FromBody] SaveAuthorResource newSaveAuthorResource)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+
+        public async Task<IActionResult> PutAuthor(int id, [FromBody] SaveAuthorResource newSaveAuthorResource)
         {
             var oldAuthor = await _authorService.GetAuthorByIdAsync(id);
 
@@ -83,7 +101,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteAuthor(int id)
+        public async Task<IActionResult> DeleteAuthor(int id)
         {
             var author = await _authorService.GetAuthorByIdAsync(id);
 

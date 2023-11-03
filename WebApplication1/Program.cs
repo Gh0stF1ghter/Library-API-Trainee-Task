@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Services;
 using System.Text;
 using Core.Models.Auth;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +56,19 @@ services.AddAutoMapper(typeof(Program));
 services.AddControllers();
 
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen(s => s.SwaggerDoc("v1", new OpenApiInfo { Title = "Libary", Version = "v1" }));
+services.AddSwaggerGen(s =>
+{
+    s.SwaggerDoc(
+        "v1",
+        new OpenApiInfo
+        {
+            Title = "Libary API",
+            Description = "A sample of basic API that provides information about books and their authors, genres and ISBN"
+        });
+
+    var xmlDoc = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
+    s.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlDoc));
+});
 
 var app = builder.Build();
 
