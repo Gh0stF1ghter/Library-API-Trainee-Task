@@ -31,6 +31,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<GenreResource>> GetGenreById(int id)
         {
             var genre = await _genreService.GetGenreByIdAsync(id);
@@ -44,6 +45,8 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<GenreResource>> PostGenre(SaveGenreResource saveGenreResource)
         {
             var validator = new SaveGenreResourceValidator();
@@ -57,10 +60,12 @@ namespace API.Controllers
 
             var genreResource = _mapper.Map<GenreResource>(newGenre);
 
-            return Ok(genreResource);
+            return CreatedAtAction(nameof(PostGenre), genreResource);
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> PutGenre(int id, [FromBody] SaveGenreResource newSaveGenreResource)
         {
             var oldGenre = await _genreService.GetGenreByIdAsync(id);
@@ -85,6 +90,8 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> DeleteBook(int id)
         {
             var genre = await _genreService.GetGenreByIdAsync(id);

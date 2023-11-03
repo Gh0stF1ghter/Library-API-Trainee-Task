@@ -20,11 +20,6 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        /// <summary>
-        /// Returns a list of authors.
-        /// </summary>
-        /// <returns>A list of authors from the database</returns>
-        /// <response code="200">Returns a list of authors</response>
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<AuthorResource>>> GetAllAuthors()
@@ -35,12 +30,6 @@ namespace API.Controllers
             return Ok(authorsResource);
         }
 
-        /// <summary>
-        /// Returns an author by its id.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns>An author by id</returns>
-        /// <response code="200">Returns an author</response>
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -77,7 +66,7 @@ namespace API.Controllers
 
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PutAuthor(int id, [FromBody] SaveAuthorResource newSaveAuthorResource)
         {
             var oldAuthor = await _authorService.GetAuthorByIdAsync(id);
@@ -101,6 +90,8 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteAuthor(int id)
         {
             var author = await _authorService.GetAuthorByIdAsync(id);

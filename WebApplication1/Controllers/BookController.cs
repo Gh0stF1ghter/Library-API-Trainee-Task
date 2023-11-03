@@ -23,6 +23,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<BookResource>>> GetAllBooks()
         {
             var books = await _bookService.GetAllBooksAsync();
@@ -32,6 +33,8 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BookResource>> GetBookById(int id)
         {
             var book = await _bookService.GetBookByIdAsync(id);
@@ -45,15 +48,22 @@ namespace API.Controllers
         }
 
         [HttpGet("isbn")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BookResource>> GetBookByIsbn(string isbn)
         {
             var book = await _bookService.GetBookByIsbnAsync(isbn);
+            if ( book == null )
+                return NotFound("Book with isbn: " + isbn + " does not exist");
+
             var bookResource = _mapper.Map<BookResource>(book);
 
             return Ok(bookResource);
         }
 
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<BookResource>> PostBook([FromBody]SaveBookResource saveBookResource)
         {
             var validator = new SaveBookResourceValidator();
@@ -71,10 +81,13 @@ namespace API.Controllers
 
             var bookResource = _mapper.Map<BookResource>(newBook);
 
-            return Ok(bookResource);
+            return CreatedAtAction(nameof(PostBook), bookResource);
         }
 
         [HttpPost("{bookId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> AddGenresToBook(int bookId, [FromBody] ICollection<int> genreIds)
         {
             var book = await _bookService.GetBookByIdAsync(bookId);
@@ -105,6 +118,8 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> PutBook(int id, [FromBody] SaveBookResource newSaveBookResource)
         {
             var oldBook = await _bookService.GetBookByIdAsync(id);
@@ -127,6 +142,8 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> DeleteBook(int id)
         {
             var genre = await _bookService.GetBookByIdAsync(id);

@@ -65,9 +65,6 @@ services.AddSwaggerGen(s =>
             Title = "Libary API",
             Description = "A sample of basic API that provides information about books and their authors, genres and ISBN"
         });
-
-    var xmlDoc = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
-    s.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlDoc));
 });
 
 var app = builder.Build();
