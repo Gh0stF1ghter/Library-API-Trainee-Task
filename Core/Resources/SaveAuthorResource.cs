@@ -1,4 +1,4 @@
-﻿namespace API.Resources
+﻿namespace Core.Resources
 {
     public class SaveAuthorResource
     {

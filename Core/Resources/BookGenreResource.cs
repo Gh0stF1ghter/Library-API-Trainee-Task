@@ -1,6 +1,6 @@
 ﻿using Core.Models;
 
-namespace API.Resources
+namespace Core.Resources
 {
     public class BookGenreResource
     {

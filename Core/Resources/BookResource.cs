@@ -1,7 +1,7 @@
 ﻿using Core.Models;
 using System.Collections.ObjectModel;
 
-namespace API.Resources
+namespace Core.Resources
 {
     public class BookResource
     {
