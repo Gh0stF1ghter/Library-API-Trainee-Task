@@ -1,7 +1,7 @@
-﻿using API.Resources;
-using API.Validators;
+﻿using API.Validators;
 using AutoMapper;
 using Core.Models;
+using Core.Resources;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,12 +13,10 @@ namespace API.Controllers
     {
         private readonly IBookService _bookService;
         private readonly IGenreService _genreService;
-        private readonly IMapper _mapper;
 
-        public BookController(IBookService bookService, IMapper mapper, IGenreService genreService)
+        public BookController(IBookService bookService, IGenreService genreService)
         {
             _bookService = bookService;
-            _mapper = mapper;
             _genreService = genreService;
         }
 
@@ -26,10 +24,9 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<BookResource>>> GetAllBooks()
         {
-            var books = await _bookService.GetAllBooksAsync();
-            var BooksResource = _mapper.Map<IEnumerable<BookResource>>(books);
+            var booksResource = await _bookService.GetAllBooksAsync();
 
-            return Ok(BooksResource);
+            return Ok(booksResource);
         }
 
         [HttpGet("{id}")]
@@ -42,9 +39,7 @@ namespace API.Controllers
             if (book == null)
                 return NotFound("Book with id: " +  id + " does not exist");
 
-            var bookResource = _mapper.Map<BookResource>(book);
-
-            return Ok(bookResource);
+            return Ok(book);
         }
 
         [HttpGet("isbn")]
@@ -53,12 +48,11 @@ namespace API.Controllers
         public async Task<ActionResult<BookResource>> GetBookByIsbn(string isbn)
         {
             var book = await _bookService.GetBookByIsbnAsync(isbn);
+
             if ( book == null )
                 return NotFound("Book with isbn: " + isbn + " does not exist");
 
-            var bookResource = _mapper.Map<BookResource>(book);
-
-            return Ok(bookResource);
+            return Ok(book);
         }
 
         [HttpPost]
@@ -72,16 +66,12 @@ namespace API.Controllers
             if (!validation.IsValid)
                 return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
 
-            var book = _mapper.Map<Book>(saveBookResource);
-
-            if (await _bookService.GetBookByIsbnAsync(book.BookISBN) != null)
+            if (await _bookService.GetBookByIsbnAsync(saveBookResource.BookISBN) != null)
                 return BadRequest("Book with such ISBN already exists");
 
-            var newBook = await _bookService.CreateBookAsync(book);
+            var newBook = await _bookService.CreateBookAsync(saveBookResource);
 
-            var bookResource = _mapper.Map<BookResource>(newBook);
-
-            return CreatedAtAction(nameof(PostBook), bookResource);
+            return CreatedAtAction(nameof(PostBook), newBook);
         }
 
         [HttpPost("{bookId}")]
@@ -95,7 +85,7 @@ namespace API.Controllers
             if (book == null)
                 return NotFound("Book with id: " + bookId + " does not exist");
 
-            List<BookGenre> bookGenres = new();
+            List<BookGenreResource> bookGenres = new();
 
             foreach (var id in genreIds)
             {
@@ -103,16 +93,14 @@ namespace API.Controllers
                 if (genre == null)
                     return BadRequest();
 
-                var bookGenre = _mapper.Map<BookGenreResource, BookGenre>(new BookGenreResource { BookId = book.BookId, GenreId = id });
+                var bookGenre = new BookGenreResource { BookId = book.BookId, GenreId = id };
 
                 bookGenres.Add(bookGenre);
             }
 
             await _bookService.AddGenresToBookAsync(bookGenres);
 
-            var bookwithGenres = await _bookService.GetBookByIdAsync(bookId);
-            var bookwithGenresResource = _mapper.Map<BookResource>(bookwithGenres);
-
+            var bookwithGenresResource = await _bookService.GetBookByIdAsync(bookId);
 
             return Ok(bookwithGenresResource);
         }
@@ -132,11 +120,9 @@ namespace API.Controllers
             if (validation.IsValid)
                 return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
 
-            var newBook = _mapper.Map<Book>(newSaveBookResource);
-            await _bookService.UpdateBookAsync(oldBook, newBook);
+            await _bookService.UpdateBookAsync(oldBook, newSaveBookResource);
 
-            var updatedBook = await _bookService.GetBookByIdAsync(id);
-            var updatedBookResource = _mapper.Map<BookResource>(updatedBook);
+            var updatedBookResource = await _bookService.GetBookByIdAsync(id);
 
             return Ok(updatedBookResource);
         }
@@ -146,12 +132,12 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> DeleteBook(int id)
         {
-            var genre = await _bookService.GetBookByIdAsync(id);
+            var book = await _bookService.GetBookByIdAsync(id);
 
-            if (genre is null)
+            if (book is null)
                 return BadRequest("Book with id: " + id + " does not exist");
 
-            await _bookService.DeleteBookAsync(genre);
+            await _bookService.DeleteBookAsync(book);
 
             return NoContent();
         }

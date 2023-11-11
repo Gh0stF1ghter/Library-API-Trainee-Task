@@ -1,34 +1,66 @@
-﻿using Core;
+﻿using AutoMapper;
+using Core;
 using Core.Models;
+using Core.Resources;
 using Core.Services;
 
-namespace Services
+namespace API.Services
 {
     public class AuthorService : IAuthorService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public AuthorService(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
 
-        public async Task<IEnumerable<Author>> GetAllAuthorsAsync() => await _unitOfWork.Authors.GetAllAsync();
-        public async ValueTask<Author?> GetAuthorByIdAsync(int id) => await _unitOfWork.Authors.GetByIdAsync(id);
-
-        public async Task<Author> CreateAuthorAsync(Author author)
+        public AuthorService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            await _unitOfWork.Authors.AddAsync(author);
-            await _unitOfWork.CommitAsync();
-            return author;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task UpdateAuthorAsync(Author oldAuthor, Author newAuthor)
+        public async Task<IEnumerable<AuthorResource>> GetAllAuthorsAsync()
         {
+            var authors = await _unitOfWork.Authors.GetAllAsync();
+
+            var authorsResource = _mapper.Map<IEnumerable<AuthorResource>>(authors);
+
+            return authorsResource;
+        }
+        public async ValueTask<AuthorResource?> GetAuthorByIdAsync(int id)
+        {
+            var author = await _unitOfWork.Authors.GetByIdAsync(id);
+
+            var authorResource = _mapper.Map<AuthorResource>(author);
+
+            return authorResource;
+        }
+
+        public async Task<AuthorResource> CreateAuthorAsync(SaveAuthorResource saveAuthorResource)
+        {
+            var author = _mapper.Map<Author>(saveAuthorResource);
+
+            await _unitOfWork.Authors.AddAsync(author);
+            await _unitOfWork.CommitAsync();
+
+            var authorResource = _mapper.Map<AuthorResource>(author);
+
+            return authorResource;
+        }
+
+        public async Task UpdateAuthorAsync(AuthorResource oldAuthorResource, SaveAuthorResource newSaveAuthorResource)
+        {
+            var oldAuthor = _mapper.Map<Author>(oldAuthorResource);
+            var newAuthor = _mapper.Map<Author>(newSaveAuthorResource);
+
             oldAuthor.AuthorFirstMidName = newAuthor.AuthorFirstMidName;
             oldAuthor.AuthorLastName = newAuthor.AuthorLastName;
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task DeleteAuthor(Author author)
+        public async Task DeleteAuthor(AuthorResource authorResource)
         {
+            var author = _mapper.Map<Author>(authorResource);
+
             _unitOfWork.Authors.Remove(author);
             await _unitOfWork.CommitAsync();
         }

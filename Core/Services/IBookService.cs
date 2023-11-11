@@ -1,17 +1,18 @@
 ﻿using Core.Models;
+using Core.Resources;
 
 namespace Core.Services
 {
     public interface IBookService
     {
-        Task<IEnumerable<Book>> GetAllBooksAsync();
-        ValueTask<Book?> GetBookByIdAsync(int id);
+        Task<IEnumerable<BookResource>> GetAllBooksAsync();
+        Task<BookResource?> GetBookByIdAsync(int id);
 
-        Task<Book> CreateBookAsync(Book book);
-        Task AddGenresToBookAsync(ICollection<BookGenre> bookGenres);
-        Task<Book?> GetBookByIsbnAsync(string bookIsbn);
+        Task<BookResource> CreateBookAsync(SaveBookResource book);
+        Task AddGenresToBookAsync(ICollection<BookGenreResource> bookGenres);
+        Task<BookResource?> GetBookByIsbnAsync(string bookIsbn);
 
-        Task UpdateBookAsync(Book oldBook, Book newBook);
-        Task DeleteBookAsync(Book book);
+        Task UpdateBookAsync(BookResource oldBook, SaveBookResource newBook);
+        Task DeleteBookAsync(BookResource book);
     }
 }

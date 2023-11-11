@@ -1,15 +1,16 @@
-﻿using Core.Models;
+﻿using Core.Resources;
+using Core.Models;
 
 namespace Core.Services
 {
     public interface IAuthorService
     {
-        Task<IEnumerable<Author>> GetAllAuthorsAsync();
-        ValueTask<Author?> GetAuthorByIdAsync(int id);
+        Task<IEnumerable<AuthorResource>> GetAllAuthorsAsync();
+        ValueTask<AuthorResource?> GetAuthorByIdAsync(int id);
 
-        Task<Author> CreateAuthorAsync(Author author);
+        Task<AuthorResource> CreateAuthorAsync(SaveAuthorResource author);
 
-        Task UpdateAuthorAsync(Author oldAuthor, Author newAuthor);
-        Task DeleteAuthor(Author author);
+        Task UpdateAuthorAsync(AuthorResource oldAuthor, SaveAuthorResource newAuthor);
+        Task DeleteAuthor(AuthorResource author);
     }
 }

@@ -1,15 +1,16 @@
 ﻿using Core.Models;
+using Core.Resources;
 
 namespace Core.Services
 {
     public interface IGenreService
     {
-        Task<IEnumerable<Genre>> GetAllGenresAsync();
-        ValueTask<Genre?> GetGenreByIdAsync(int id);
+        Task<IEnumerable<GenreResource>> GetAllGenresAsync();
+        ValueTask<GenreResource?> GetGenreByIdAsync(int id);
 
-        Task<Genre> CreateGenreAsync(Genre genre);
+        Task<GenreResource> CreateGenreAsync(SaveGenreResource genre);
 
-        Task UpdateGenreAsync(Genre oldGenre, Genre newGenre);
-        Task DeleteGenreAsync(Genre genre);
+        Task UpdateGenreAsync(GenreResource oldGenre, SaveGenreResource newGenre);
+        Task DeleteGenreAsync(GenreResource genre);
     }
 }
