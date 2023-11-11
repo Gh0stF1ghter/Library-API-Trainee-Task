@@ -5,18 +5,12 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "WebApplication1\API.csproj", "{F7B7F3D5-5848-43F5-A403-E707AF64BA06}"
 	ProjectSection(ProjectDependencies) = postProject
-		{50404515-EA5D-412B-A6CC-C65B43594D9A} = {50404515-EA5D-412B-A6CC-C65B43594D9A}
 		{7F5C6815-1165-4A4D-ACA3-17D7A323439D} = {7F5C6815-1165-4A4D-ACA3-17D7A323439D}
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{7F5C6815-1165-4A4D-ACA3-17D7A323439D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{D64FDA3E-1F27-4DD1-9503-BABD922E9ACF}"
-	ProjectSection(ProjectDependencies) = postProject
-		{7F5C6815-1165-4A4D-ACA3-17D7A323439D} = {7F5C6815-1165-4A4D-ACA3-17D7A323439D}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{50404515-EA5D-412B-A6CC-C65B43594D9A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7F5C6815-1165-4A4D-ACA3-17D7A323439D} = {7F5C6815-1165-4A4D-ACA3-17D7A323439D}
 	EndProjectSection
@@ -39,10 +33,6 @@ Global
 		{D64FDA3E-1F27-4DD1-9503-BABD922E9ACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D64FDA3E-1F27-4DD1-9503-BABD922E9ACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D64FDA3E-1F27-4DD1-9503-BABD922E9ACF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{50404515-EA5D-412B-A6CC-C65B43594D9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{50404515-EA5D-412B-A6CC-C65B43594D9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{50404515-EA5D-412B-A6CC-C65B43594D9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{50404515-EA5D-412B-A6CC-C65B43594D9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
