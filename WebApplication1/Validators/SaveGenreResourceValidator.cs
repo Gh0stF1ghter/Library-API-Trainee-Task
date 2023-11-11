@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using API.Resources;
+using Core.Resources;
 
 namespace API.Validators
 {

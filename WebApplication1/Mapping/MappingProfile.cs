@@ -1,8 +1,8 @@
-﻿using API.Resources;
-using AutoMapper;
+﻿using AutoMapper;
 using Core.Models;
+using Core.Resources;
 
-namespace API.Mappers
+namespace API.Mapping
 {
     public class MappingProfile : Profile
     {

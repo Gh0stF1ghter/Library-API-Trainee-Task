@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Services;
 using System.Text;
 using Core.Models.Auth;
-using System.Reflection;
+using API.Services;
+using API.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 

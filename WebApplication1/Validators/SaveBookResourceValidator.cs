@@ -1,4 +1,4 @@
-﻿using API.Resources;
+﻿using Core.Resources;
 using FluentValidation;
 
 namespace API.Validators
