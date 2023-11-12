@@ -10,6 +10,8 @@ using System.Text;
 using Core.Models.Auth;
 using API.Services;
 using API.Auth;
+using API.Filters;
+using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddDbContext<LibraryContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Data")));
+
+services.AddFluentValidationAutoValidation();
 
 services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<LibraryContext>()

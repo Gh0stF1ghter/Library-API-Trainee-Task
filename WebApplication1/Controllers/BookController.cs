@@ -1,6 +1,4 @@
 ﻿using API.Validators;
-using AutoMapper;
-using Core.Models;
 using Core.Resources;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
