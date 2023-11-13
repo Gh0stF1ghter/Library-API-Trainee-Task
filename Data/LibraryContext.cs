@@ -15,14 +15,16 @@ namespace Data
         public DbSet<Book> Books { get; set; } = null!;
         public DbSet<BookGenre> BookGenres { get; set; } = null!;
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(builder);
 
-            modelBuilder.ApplyConfiguration(new AuthorConfiguration());
-            modelBuilder.ApplyConfiguration(new GenreConfiguration());
-            modelBuilder.ApplyConfiguration(new BookConfiguration());
-            modelBuilder.ApplyConfiguration(new BookGenreConfiguration());
+            builder.ApplyConfiguration(new AuthorConfiguration());
+            builder.ApplyConfiguration(new GenreConfiguration());
+            builder.ApplyConfiguration(new BookConfiguration());
+            builder.ApplyConfiguration(new BookGenreConfiguration());
+
+            new DbInitializer(builder).Seed();
         }
     }
 }
