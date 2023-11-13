@@ -1,17 +1,17 @@
+using API.Services;
 using Core;
+using Core.Models.Auth;
 using Core.Services;
 using Data;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using System.Reflection;
 using System.Text;
-using Core.Models.Auth;
-using API.Services;
-using API.Auth;
-using API.Filters;
-using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +20,6 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddDbContext<LibraryContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), x => x.MigrationsAssembly("Data")));
-
-services.AddFluentValidationAutoValidation();
 
 services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<LibraryContext>()
@@ -47,13 +45,15 @@ services.AddAuthentication(options =>
     };
 });
 
-services.AddTransient<IAuthentication, Authentication>();
+services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+services.AddFluentValidationAutoValidation();
+
+services.AddTransient<IAuthentication, AuthenticationService>();
 
 services.AddScoped<IUnitOfWork, UnitOfWork>();
 services.AddTransient<IGenreService, GenreService>();
 services.AddTransient<IAuthorService, AuthorService>();
 services.AddTransient<IBookService, BookService>();
-
 
 services.AddAutoMapper(typeof(Program));
 
