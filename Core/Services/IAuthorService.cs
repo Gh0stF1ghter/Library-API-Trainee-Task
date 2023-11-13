@@ -1,12 +1,11 @@
 ﻿using Core.Resources;
-using Core.Models;
 
 namespace Core.Services
 {
     public interface IAuthorService
     {
         Task<IEnumerable<AuthorResource>> GetAllAuthorsAsync();
-        ValueTask<AuthorResource?> GetAuthorByIdAsync(int id);
+        Task<AuthorResource?> GetAuthorByIdAsync(int id);
 
         Task<AuthorResource> CreateAuthorAsync(SaveAuthorResource author);
 

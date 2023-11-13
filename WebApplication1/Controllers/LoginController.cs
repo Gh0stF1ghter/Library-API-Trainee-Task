@@ -16,12 +16,9 @@ namespace API.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] Login login)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("Invalid payload");
-
             var (status, message) = await _auth.AuthenticateAsync(login);
 
-            if(!status)
+            if (!status)
                 return BadRequest(message);
 
             return Ok(message);
@@ -31,9 +28,6 @@ namespace API.Controllers
         [Route("reg")]
         public async Task<IActionResult> Register([FromBody] Register register)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("Invalid payload");
-
             var (status, message) = await _auth.RegisterAsync(register, Role.Admin);
 
             if (!status)

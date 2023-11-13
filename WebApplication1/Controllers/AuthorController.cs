@@ -1,5 +1,4 @@
-﻿using API.Validators;
-using Core.Resources;
+﻿using Core.Resources;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +11,12 @@ namespace API.Controllers
         private readonly IAuthorService _authorService;
 
         public AuthorController(IAuthorService authorService) => _authorService = authorService;
-        
+
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<AuthorResource>>> GetAllAuthors()
-        { 
+        {
             var authors = await _authorService.GetAllAuthorsAsync();
 
             return Ok(authors);
@@ -39,9 +38,9 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AuthorResource>> PostAuthor( SaveAuthorResource saveAuthorResource)
+        public async Task<ActionResult<AuthorResource>> PostAuthor(SaveAuthorResource saveAuthorResource)
         {
-            var validator = new SaveAuthorResourceValidator();
+            //var validator = new SaveAuthorResourceValidator();
 
             //var validation = validator.Validate(saveAuthorResource);
             //if (!validation.IsValid)

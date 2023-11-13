@@ -1,5 +1,4 @@
-﻿using Core.Models;
-using Core.Resources;
+﻿using Core.Resources;
 
 namespace Core.Services
 {

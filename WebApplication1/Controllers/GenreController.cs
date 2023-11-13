@@ -1,8 +1,6 @@
-﻿using API.Validators;
-using Core.Resources;
+﻿using Core.Resources;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
 
 namespace API.Controllers
 {
@@ -11,9 +9,9 @@ namespace API.Controllers
     public class GenreController : ControllerBase
     {
         private readonly IGenreService _genreService;
-        
+
         public GenreController(IGenreService genreService) => _genreService = genreService;
-        
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<GenreResource>>> GetAllGenres()
         {
@@ -28,9 +26,9 @@ namespace API.Controllers
         {
             var genre = await _genreService.GetGenreByIdAsync(id);
 
-            if(genre == null)
+            if (genre == null)
                 return NotFound("Genre with id: " + id + "does not exist");
-            
+
             return Ok(genre);
         }
 
@@ -39,13 +37,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<GenreResource>> PostGenre(SaveGenreResource saveGenreResource)
         {
-            //var validation = validator.Validate(saveGenreResource);
-
-            //if (!validation.IsValid)
-            //    return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
-
             var newGenre = await _genreService.CreateGenreAsync(saveGenreResource);
-
 
             return CreatedAtAction(nameof(PostGenre), newGenre);
         }
@@ -59,12 +51,6 @@ namespace API.Controllers
 
             if (oldGenre is null)
                 return BadRequest("Genre with id: " + id + "does not exist");
-
-            //var validation = validator.Validate(newSaveGenreResource);
-
-            //if (!validation.IsValid)
-            //    return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
-
 
             await _genreService.UpdateGenreAsync(oldGenre, newSaveGenreResource);
 

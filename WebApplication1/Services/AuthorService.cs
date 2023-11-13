@@ -26,7 +26,7 @@ namespace API.Services
 
             return authorsResource;
         }
-        public async ValueTask<AuthorResource?> GetAuthorByIdAsync(int id)
+        public async Task<AuthorResource?> GetAuthorByIdAsync(int id)
         {
             var author = await _unitOfWork.Authors.GetByIdAsync(id);
 

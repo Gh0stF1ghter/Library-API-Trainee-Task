@@ -1,6 +1,4 @@
-﻿using Core.Models;
-
-namespace Core.Resources
+﻿namespace Core.Resources
 {
     public class BookGenreResource
     {

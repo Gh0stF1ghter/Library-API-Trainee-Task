@@ -1,9 +1,4 @@
 ﻿using Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Repositories
 {
@@ -11,7 +6,7 @@ namespace Core.Repositories
     {
         Task<IEnumerable<Book>> GetAllWithRelateAsync();
 
-        ValueTask<Book?> GetWithRelateByIdAsync(int id);
+        Task<Book?> GetWithRelateByIdAsync(int id);
 
         Task AddGenresToBookAsync(ICollection<BookGenre> bookGenres);
     }

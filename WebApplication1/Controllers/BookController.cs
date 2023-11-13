@@ -1,5 +1,4 @@
-﻿using API.Validators;
-using Core.Resources;
+﻿using Core.Resources;
 using Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +34,7 @@ namespace API.Controllers
             var book = await _bookService.GetBookByIdAsync(id);
 
             if (book == null)
-                return NotFound("Book with id: " +  id + " does not exist");
+                return NotFound("Book with id: " + id + " does not exist");
 
             return Ok(book);
         }
@@ -47,7 +46,7 @@ namespace API.Controllers
         {
             var book = await _bookService.GetBookByIsbnAsync(isbn);
 
-            if ( book == null )
+            if (book == null)
                 return NotFound("Book with isbn: " + isbn + " does not exist");
 
             return Ok(book);
@@ -56,14 +55,8 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<BookResource>> PostBook([FromBody]SaveBookResource saveBookResource)
+        public async Task<ActionResult<BookResource>> PostBook([FromBody] SaveBookResource saveBookResource)
         {
-            var validator = new SaveBookResourceValidator();
-            var validation = validator.Validate(saveBookResource);
-
-            if (!validation.IsValid)
-                return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
-
             if (await _bookService.GetBookByIsbnAsync(saveBookResource.BookISBN) != null)
                 return BadRequest("Book with such ISBN already exists");
 
@@ -112,11 +105,6 @@ namespace API.Controllers
 
             if (oldBook is null)
                 return BadRequest("Book with id: " + id + " does not exist");
-
-            var validator = new SaveBookResourceValidator();
-            var validation = validator.Validate(newSaveBookResource);
-            if (validation.IsValid)
-                return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
 
             await _bookService.UpdateBookAsync(oldBook, newSaveBookResource);
 

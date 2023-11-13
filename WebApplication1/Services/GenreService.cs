@@ -25,8 +25,8 @@ namespace API.Services
             return genresResource;
         }
 
-        public async ValueTask<GenreResource?> GetGenreByIdAsync(int id)
-        { 
+        public async Task<GenreResource?> GetGenreByIdAsync(int id)
+        {
             var genre = await _unitOfWork.Genres.GetByIdAsync(id);
 
             var genreResource = _mapper.Map<GenreResource>(genre);

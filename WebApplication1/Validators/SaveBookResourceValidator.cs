@@ -33,7 +33,7 @@ namespace API.Validators
 
                     return result % 10 == 0;
                 })
-                .WithMessage("Isbn check digit is invalid. See ... for details");
+                .WithMessage("Isbn check digit is invalid");
 
             RuleFor(b => b.BookReturnDate)
                 .GreaterThan(b => b.BookTakeDate);

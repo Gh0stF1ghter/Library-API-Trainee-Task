@@ -5,7 +5,7 @@ namespace Core.Repositories
     public interface IRepository<TEntity> where TEntity : class
     {
         Task<IEnumerable<TEntity>> GetAllAsync();
-        ValueTask<TEntity?> GetByIdAsync(int id);
+        Task<TEntity?> GetByIdAsync(int id);
 
         Task<TEntity?> SingleOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 

@@ -15,7 +15,7 @@ namespace Data.Repositories
 
         public async Task<IEnumerable<Book>> GetAllWithRelateAsync() => await libraryContext.Books.Include(b => b.Author).Include(b => b.BookGenres).ThenInclude(bg => bg.Genre).ToListAsync();
 
-        public async ValueTask<Book?> GetWithRelateByIdAsync(int id) => await libraryContext.Books.Include(b => b.Author).Include(b => b.BookGenres).ThenInclude(bg => bg.Genre).SingleOrDefaultAsync(b => b.BookId == id);
+        public async Task<Book?> GetWithRelateByIdAsync(int id) => await libraryContext.Books.Include(b => b.Author).Include(b => b.BookGenres).ThenInclude(bg => bg.Genre).SingleOrDefaultAsync(b => b.BookId == id);
 
         public async Task AddGenresToBookAsync(ICollection<BookGenre> bookGenres) => await libraryContext.BookGenres.AddRangeAsync(bookGenres);
     }
