@@ -3,7 +3,6 @@ using Core;
 using Core.Models;
 using Core.Resources;
 using Core.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace API.Services
 {
@@ -11,7 +10,6 @@ namespace API.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-
 
         public AuthorService(IUnitOfWork unitOfWork, IMapper mapper)
         {

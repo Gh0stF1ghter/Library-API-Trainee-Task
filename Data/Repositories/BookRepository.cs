@@ -8,10 +8,7 @@ namespace Data.Repositories
     {
         private readonly LibraryContext libraryContext;
 
-        public BookRepository(LibraryContext context) : base(context)
-        {
-            libraryContext = context;
-        }
+        public BookRepository(LibraryContext context) : base(context) => libraryContext = context;
 
         public async Task<IEnumerable<Book>> GetAllWithRelateAsync() => await libraryContext.Books.Include(b => b.Author).Include(b => b.BookGenres).ThenInclude(bg => bg.Genre).ToListAsync();
 

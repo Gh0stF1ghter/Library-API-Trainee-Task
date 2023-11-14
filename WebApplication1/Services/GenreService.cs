@@ -66,6 +66,5 @@ namespace API.Services
             _unitOfWork.Genres.Remove(genre);
             await _unitOfWork.CommitAsync();
         }
-
     }
 }

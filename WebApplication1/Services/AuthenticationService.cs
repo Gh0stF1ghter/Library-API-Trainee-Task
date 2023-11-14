@@ -38,7 +38,6 @@ namespace API.Services
             if (!createUser.Succeeded)
                 return (false, "Fatal error");
 
-            //replace
             if (!await _roleManager.RoleExistsAsync(role))
                 await _roleManager.CreateAsync(new IdentityRole(role));
 
