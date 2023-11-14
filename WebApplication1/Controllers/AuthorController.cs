@@ -1,5 +1,7 @@
-﻿using Core.Resources;
+﻿using Core.Models;
+using Core.Resources;
 using Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -14,6 +16,7 @@ namespace API.Controllers
 
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<AuthorResource>>> GetAllAuthors()
         {
@@ -23,6 +26,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<AuthorResource>> GetAuthorById(int id)
@@ -36,43 +40,34 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<AuthorResource>> PostAuthor(SaveAuthorResource saveAuthorResource)
         {
-            //var validator = new SaveAuthorResourceValidator();
-
-            //var validation = validator.Validate(saveAuthorResource);
-            //if (!validation.IsValid)
-            //    return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
-
             var newAuthor = await _authorService.CreateAuthorAsync(saveAuthorResource);
 
             return CreatedAtAction(nameof(PostAuthor), newAuthor);
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PutAuthor(int id, [FromBody] SaveAuthorResource newAuthor)
         {
-            var oldAuthor = await _authorService.GetAuthorByIdAsync(id);
-
-            if (oldAuthor is null)
-                return BadRequest("author with id: " + id + " does not exist");
-
-            //var validation = validator.Validate(newSaveAuthorResource);
-            //if (!validation.IsValid)
-            //    return BadRequest("Request has one or more validation errors:\n" + validation.Errors);
-
-            await _authorService.UpdateAuthorAsync(oldAuthor, newAuthor);
+            await _authorService.UpdateAuthorAsync(id, newAuthor);
 
             var updatedAuthor = await _authorService.GetAuthorByIdAsync(id);
+
+            if (updatedAuthor == null)
+                return BadRequest("author with id: " + id + " does not exist");
 
             return Ok(updatedAuthor);
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteAuthor(int id)

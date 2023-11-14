@@ -1,5 +1,6 @@
 ﻿using Core.Resources;
 using Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -21,6 +22,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<GenreResource>> GetGenreById(int id)
         {
@@ -33,6 +35,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<GenreResource>> PostGenre(SaveGenreResource saveGenreResource)
@@ -43,23 +46,23 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> PutGenre(int id, [FromBody] SaveGenreResource newSaveGenreResource)
         {
-            var oldGenre = await _genreService.GetGenreByIdAsync(id);
-
-            if (oldGenre is null)
-                return BadRequest("Genre with id: " + id + "does not exist");
-
-            await _genreService.UpdateGenreAsync(oldGenre, newSaveGenreResource);
+            await _genreService.UpdateGenreAsync(id, newSaveGenreResource);
 
             var updatedGenre = await _genreService.GetGenreByIdAsync(id);
+
+            if (updatedGenre == null)
+                return BadRequest("Genre with id: " + id + "does not exist");
 
             return Ok(updatedGenre);
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> DeleteBook(int id)

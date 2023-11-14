@@ -1,5 +1,6 @@
 ﻿using Core.Resources;
 using Core.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -18,6 +19,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<BookResource>>> GetAllBooks()
         {
@@ -27,6 +29,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BookResource>> GetBookById(int id)
@@ -40,6 +43,7 @@ namespace API.Controllers
         }
 
         [HttpGet("isbn")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<BookResource>> GetBookByIsbn(string isbn)
@@ -53,6 +57,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<BookResource>> PostBook([FromBody] SaveBookResource saveBookResource)
@@ -66,6 +71,7 @@ namespace API.Controllers
         }
 
         [HttpPost("{bookId}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -97,23 +103,23 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> PutBook(int id, [FromBody] SaveBookResource newSaveBookResource)
         {
-            var oldBook = await _bookService.GetBookByIdAsync(id);
-
-            if (oldBook is null)
-                return BadRequest("Book with id: " + id + " does not exist");
-
-            await _bookService.UpdateBookAsync(oldBook, newSaveBookResource);
+            await _bookService.UpdateBookAsync(id, newSaveBookResource);
 
             var updatedBookResource = await _bookService.GetBookByIdAsync(id);
+
+            if (updatedBookResource == null)
+                return BadRequest("Book with id: " + id + " does not exist");
 
             return Ok(updatedBookResource);
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> DeleteBook(int id)

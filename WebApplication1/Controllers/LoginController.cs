@@ -28,7 +28,7 @@ namespace API.Controllers
         [Route("reg")]
         public async Task<IActionResult> Register([FromBody] Register register)
         {
-            var (status, message) = await _auth.RegisterAsync(register, Role.Admin);
+            var (status, message) = await _auth.RegisterAsync(register, Role.User);
 
             if (!status)
                 return BadRequest(message);
