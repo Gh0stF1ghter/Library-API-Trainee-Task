@@ -9,7 +9,7 @@ namespace Core.Services
 
         Task<GenreResource> CreateGenreAsync(SaveGenreResource genre);
 
-        Task UpdateGenreAsync(GenreResource oldGenre, SaveGenreResource newGenre);
+        Task UpdateGenreAsync(int id, SaveGenreResource newGenre);
         Task DeleteGenreAsync(GenreResource genre);
     }
 }

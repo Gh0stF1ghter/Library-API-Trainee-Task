@@ -67,9 +67,13 @@ namespace API.Services
             return bookResource;
         }
 
-        public async Task UpdateBookAsync(BookResource oldBookResource, SaveBookResource newBookResource)
+        public async Task UpdateBookAsync(int id , SaveBookResource newBookResource)
         {
-            var oldBook = _mapper.Map<Book>(oldBookResource);
+            var oldBook = await _unitOfWork.Books.GetByIdAsync(id);
+
+            if (oldBook is null)
+                return;
+
             var newBook = _mapper.Map<Book>(newBookResource);
 
             oldBook.BookName = newBook.BookName;

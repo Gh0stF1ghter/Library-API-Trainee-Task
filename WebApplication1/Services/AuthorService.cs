@@ -3,6 +3,7 @@ using Core;
 using Core.Models;
 using Core.Resources;
 using Core.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace API.Services
 {
@@ -47,9 +48,13 @@ namespace API.Services
             return authorResource;
         }
 
-        public async Task UpdateAuthorAsync(AuthorResource oldAuthorResource, SaveAuthorResource newSaveAuthorResource)
+        public async Task UpdateAuthorAsync(int id, SaveAuthorResource newSaveAuthorResource)
         {
-            var oldAuthor = _mapper.Map<Author>(oldAuthorResource);
+            var oldAuthor = await _unitOfWork.Authors.GetByIdAsync(id);
+
+            if (oldAuthor is null)
+                return;
+
             var newAuthor = _mapper.Map<Author>(newSaveAuthorResource);
 
             oldAuthor.AuthorFirstMidName = newAuthor.AuthorFirstMidName;

@@ -46,9 +46,13 @@ namespace API.Services
             return genreResource;
         }
 
-        public async Task UpdateGenreAsync(GenreResource oldGenreResource, SaveGenreResource newSaveGenreResource)
+        public async Task UpdateGenreAsync(int id, SaveGenreResource newSaveGenreResource)
         {
-            var oldGenre = _mapper.Map<Genre>(oldGenreResource);
+            var oldGenre = await _unitOfWork.Genres.GetByIdAsync(id);
+
+            if (oldGenre is null)
+                return;
+
             var newGenre = _mapper.Map<Genre>(newSaveGenreResource);
 
             oldGenre.GenreName = newGenre.GenreName;

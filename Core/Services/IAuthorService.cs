@@ -9,7 +9,7 @@ namespace Core.Services
 
         Task<AuthorResource> CreateAuthorAsync(SaveAuthorResource author);
 
-        Task UpdateAuthorAsync(AuthorResource oldAuthor, SaveAuthorResource newAuthor);
+        Task UpdateAuthorAsync(int id, SaveAuthorResource newAuthor);
         Task DeleteAuthor(AuthorResource author);
     }
 }

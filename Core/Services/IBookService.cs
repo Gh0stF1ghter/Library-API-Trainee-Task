@@ -11,7 +11,7 @@ namespace Core.Services
         Task AddGenresToBookAsync(ICollection<BookGenreResource> bookGenres);
         Task<BookResource?> GetBookByIsbnAsync(string bookIsbn);
 
-        Task UpdateBookAsync(BookResource oldBook, SaveBookResource newBook);
+        Task UpdateBookAsync(int id, SaveBookResource newBook);
         Task DeleteBookAsync(BookResource book);
     }
 }
