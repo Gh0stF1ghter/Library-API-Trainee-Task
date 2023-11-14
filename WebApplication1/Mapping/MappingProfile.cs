@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Models;
+using Core.Models.Auth;
 using Core.Resources;
 
 namespace API.Mapping
@@ -8,6 +9,8 @@ namespace API.Mapping
     {
         public MappingProfile()
         {
+            CreateMap<Register, User>();
+
             CreateMap<Author, AuthorResource>();
             CreateMap<Genre, GenreResource>();
             CreateMap<Book, BookResource>();

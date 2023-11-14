@@ -1,4 +1,5 @@
-﻿using Core;
+﻿using AutoMapper;
+using Core;
 using Core.Models.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -14,11 +15,14 @@ namespace API.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthenticationService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        private readonly IMapper _mapper;
+
+        public AuthenticationService(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         public async Task<(bool, string)> RegisterAsync(Register register, string role)
@@ -27,16 +31,7 @@ namespace API.Services
             if (exists is not null)
                 return (false, "User already exists");
 
-            User user = new()
-            {
-                SecurityStamp = Guid.NewGuid().ToString(),
-
-                Email = register.Email,
-                UserName = register.Username,
-
-                FirstMidName = register.FirstMidName,
-                LastName = register.LastName
-            };
+            User user = _mapper.Map<User>(register);
 
             var createUser = await _userManager.CreateAsync(user, register.Password);
 
@@ -83,7 +78,7 @@ namespace API.Services
             {
                 Issuer = _configuration["Authentication:Issuer"],
                 Audience = _configuration["Authentication:Audience"],
-                Expires = DateTime.Now.AddMinutes(1),
+                Expires = DateTime.Now.AddMinutes(10),
                 SigningCredentials = new(signingKey, SecurityAlgorithms.HmacSha256),
                 Subject = new(claims)
             };
