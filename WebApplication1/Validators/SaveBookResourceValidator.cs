@@ -24,6 +24,10 @@ namespace API.Validators
                 .Must(x =>
                 {
                     var chars = x.ToCharArray();
+
+                    if (chars.Length != 13)
+                        return false;
+
                     double result = 0;
 
                     for (int i = 1; i < 13; i += 2)
