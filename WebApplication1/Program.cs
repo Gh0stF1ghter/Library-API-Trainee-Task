@@ -99,6 +99,10 @@ services.AddSwaggerGen(s =>
 
 var app = builder.Build();
 
+var service = app.Services.GetService<LibraryContext>();
+
+service?.Database.Migrate();
+
 app.UseExceptionHandler("/error");
 
 if (app.Environment.IsDevelopment())
