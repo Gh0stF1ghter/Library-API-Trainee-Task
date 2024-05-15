@@ -1,3 +1,4 @@
+using API.Extensions;
 using API.Services;
 using Core;
 using Core.Models.Auth;
@@ -99,9 +100,7 @@ services.AddSwaggerGen(s =>
 
 var app = builder.Build();
 
-var service = app.Services.GetService<LibraryContext>();
-
-service?.Database.Migrate();
+app.ApplyMigrations();
 
 app.UseExceptionHandler("/error");
 
